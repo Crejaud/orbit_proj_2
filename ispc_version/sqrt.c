@@ -1,16 +1,19 @@
+#include <stdlib.h>
 #include <stdio.h>
-#include <pthread.h>
+#include "sqrt_ispc.h"
+
+using namespace ispc;
 
 const float MAX = 5;
 const float MIN = 0;
 /* Change this to whatever you'd like! */
 const int NUM_ROOTS = 1024;
 
-float x[NUM_ROOTS];
-float ans[NUM_ROOTS];
-
 int main()
 {
+	float x[NUM_ROOTS];
+	float ans[NUM_ROOTS];
+
 	int i;
 	
 	// initialize x with random floats within [MIN, MAX]
