@@ -16,7 +16,7 @@ const int NUM_ROOTS = 1024;
 int main()
 {
 	clock_t begin, end;
-	double timeSpent;
+	double timeSpentIspc, timeSpentSeq;
 	float x[NUM_ROOTS], x_seq[NUM_ROOTS];
 	float ans[NUM_ROOTS], ans_seq[NUM_ROOTS];
 
@@ -34,9 +34,9 @@ int main()
 	begin = clock();
 	sqrt_ispc(NUM_ROOTS, x, ans);
 	end = clock();
-        timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
+        timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
 	
-	printf("Time for ispc sqrt of %d elements: %f", NUM_ROOTS, timeSpent);
+	printf("[sqrt ispc] & [%d elements]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
 
 	// print out if you want to verify
 	/*
@@ -50,9 +50,11 @@ int main()
 	begin = clock();
 	sqrt_seq(x_seq, ans_seq);
 	end = clock();
-        timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
+        timeSpentSeq = (double)(end - begin) / CLOCKS_PER_SEC;
 	
-	printf("Time for sequential sqrt of %d elements: %f", NUM_ROOTS, timeSpent);
+	printf("[sqrt seq] & [%d elements]: [%f] cycles", NUM_ROOTS, timeSpentSeq);
+
+	printf("(%f speedup from ISPC)", timeSpentSeq/timeSpentIspc);
 
 	return 0;
 }
