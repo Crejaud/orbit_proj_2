@@ -6,7 +6,7 @@ export void sqrt_ispc(uniform int N, uniform float x[], uniform float ans[])
 	foreach (i = 0 ... N)
 	{
 		ans[i] = x[i];
-		while (epsilon * ans[i] < Math.abs(ans[i] - x[i]/ans[i]))
+		while (epsilon * ans[i] < fabsf(ans[i] - x[i]/ans[i]))
 		{
 			ans[i] = (x[i]/ans[i] + ans[i])/divisor;
 		}
