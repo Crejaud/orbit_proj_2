@@ -63,7 +63,7 @@ void sqrt_seq(float x[], float ans[])
 	for (i = 0; i < NUM_ROOTS; i++)
         {
                 ans[i] = x[i];
-                while (epsilon * ans[i] < fabs(ans[i] - x[i]/ans[i]))
+                while (epsilon * ans[i] < fabsf(ans[i] - x[i]/ans[i]))
                 {
                         ans[i] = (x[i]/ans[i] + ans[i])/divisor;
                 }
