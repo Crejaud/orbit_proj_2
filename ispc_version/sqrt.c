@@ -6,12 +6,16 @@
 
 using namespace ispc;
 
+void sqrt_seq(float x[], float ans[]);
+
 const float epsilon = 0.0001f;
 const float divisor = 2f;
 const float MAX = 5;
 const float MIN = 0;
 /* Change this to whatever you'd like! */
 const int NUM_ROOTS = 1024;
+const int NUM_CORES = 1;
+const int NUM_THREADS = 1;
 
 int main()
 {
@@ -32,7 +36,7 @@ int main()
 	
 	// call sqrt in parallel for all NUM_ROOTS numbers
 	begin = clock();
-	sqrt_ispc(NUM_ROOTS, x, ans);
+	sqrt_ispc(NUM_ROOTS, x, ans, NUM_CORES, NUM_THREADS);
 	end = clock();
         timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
 	
