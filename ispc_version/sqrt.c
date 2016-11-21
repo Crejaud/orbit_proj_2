@@ -56,6 +56,12 @@ int main()
 
 	printf("(%f speedup from ISPC)", timeSpentSeq/timeSpentIspc);
 
+	// free all allocated memory
+	free(x);
+	free(x_seq);
+	free(ans);
+	free(ans_seq);
+
 	return 0;
 }
 
