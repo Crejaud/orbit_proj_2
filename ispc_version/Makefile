@@ -1,4 +1,5 @@
-XX=clang++ -m64
+
+CXX=clang++ -m64
 CXXFLAGS=-Iobjs/ -O3 -Wall
 ISPC=ispc
 ISPCFLAGS=-O2 --arch=x86-64 --target=sse2
@@ -22,4 +23,3 @@ objs/simple.o: sqrt.c objs/sqr_ispc.h
 
 objs/%_ispc.h objs/%_ispc.o: %.ispc
 	$(ISPC) $(ISPCFLAGS) $< -o objs/$*_ispc.o -h objs/$*_ispc.h
-
