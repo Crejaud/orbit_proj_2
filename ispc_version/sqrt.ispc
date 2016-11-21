@@ -1,4 +1,4 @@
-const float epsilon = 0.00001f;
+const float epsilon = 0.0001f;
 const float divisor = 2f;
 
 export void sqrt_ispc(uniform int N, uniform float x[], uniform float ans[])
@@ -6,7 +6,7 @@ export void sqrt_ispc(uniform int N, uniform float x[], uniform float ans[])
 	foreach (i = 0 ... N)
 	{
 		ans[i] = x[i];
-		while(episilon * ans[i] < Math.abs(ans[i] - x[i]/ans[i]))
+		while (epsilon * ans[i] < Math.abs(ans[i] - x[i]/ans[i]))
 		{
 			ans[i] = (x[i]/ans[i] + ans[i])/divisor;
 		}
