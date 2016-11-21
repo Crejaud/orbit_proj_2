@@ -14,8 +14,6 @@ const float MAX = 5;
 const float MIN = 0;
 /* Change this to whatever you'd like! */
 const int NUM_ROOTS = 1024;
-const int NUM_CORES = 1;
-const int NUM_THREADS = 1;
 
 int main()
 {
@@ -36,11 +34,35 @@ int main()
 	
 	// call sqrt in parallel for all NUM_ROOTS numbers
 	begin = clock();
-	sqrt_ispc(NUM_ROOTS, x, ans, NUM_CORES, NUM_THREADS);
+	sqrt_ispc(NUM_ROOTS, x, ans, 1, 1);
 	end = clock();
         timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
 	
-	printf("[sqrt ispc] & [%d elements]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
+	printf("[sqrt ispc] & [%d elements] & [1 core | 1 thread]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
+
+	// call sqrt in parallel for all NUM_ROOTS numbers
+        begin = clock();
+        sqrt_ispc(NUM_ROOTS, x, ans, 1, 200);
+        end = clock();
+        timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
+
+        printf("[sqrt ispc] & [%d elements] & [1 core | 200 threads]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
+
+	// call sqrt in parallel for all NUM_ROOTS numbers
+        begin = clock();
+        sqrt_ispc(NUM_ROOTS, x, ans, 2, 1);
+        end = clock();
+        timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
+
+        printf("[sqrt ispc] & [%d elements] & [2 cores | 1 thread]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
+
+	// call sqrt in parallel for all NUM_ROOTS numbers
+        begin = clock();
+        sqrt_ispc(NUM_ROOTS, x, ans, 2, 200);
+        end = clock();
+        timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
+
+        printf("[sqrt ispc] & [%d elements] & [2 cores | 200 threads]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
 
 	// print out if you want to verify
 	/*
