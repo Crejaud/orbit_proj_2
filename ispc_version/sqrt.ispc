@@ -31,11 +31,7 @@ void sqrt(uniform int N, uniform float x[], uniform float ans[])
 {
 	foreach (i = 0 ... N)
 	{
-		ans[i] = x[i];
-		while (epsilon * ans[i] < abs(ans[i] - x[i]/ans[i]))
-		{
-			ans[i] = (x[i]/ans[i] + ans[i])/divisor;
-		}
+		newton_sqrt(i, x, ans);
 	}
 }
 
@@ -54,11 +50,7 @@ void sqrt_t(uniform int N, uniform float x[], uniform float ans[], uniform int n
 		int j;
 		for (j = start_t; j < end_t; j++)
 		{
-			ans[i] = x[i];
-                	while (epsilon * ans[i] < abs(ans[i] - x[i]/ans[i]))
-               	 	{
-                    	    ans[i] = (x[i]/ans[i] + ans[i])/divisor;
-                	}
+			newton_sqrt(j, x, ans);
 		}
 	}
 }
@@ -75,11 +67,7 @@ task void task_sqrt(uniform int N, uniform float x[], uniform float ans[])
 
 	foreach (i = start ... end)
 	{
-		ans[i] = x[i];
-                while (epsilon * ans[i] < abs(ans[i] - x[i]/ans[i]))
-                {
-                        ans[i] = (x[i]/ans[i] + ans[i])/divisor;
-                }
+		newton_sqrt(i, x, ans);
 	}
 }
 
@@ -102,11 +90,16 @@ task void task_sqrt_t(uniform int N, uniform float x[], uniform float ans[], uni
 		int j;
 		for (j = start_t, j < end_t; j++)
 		{
-                	ans[i] = x[i];
-                	while (epsilon * ans[i] < abs(ans[i] - x[i]/ans[i]))
-                	{
-                	        ans[i] = (x[i]/ans[i] + ans[i])/divisor;
-                	}
+                	newton_sqrt(j, x, ans);
 		}
+        }
+}
+
+void newton_sqrt(int i, uniform float x[], uniform float ans[])
+{
+	ans[i] = x[i];
+	while (epsilon * ans[i] < abs(ans[i] - x[i]/ans[i]))
+	{
+        	ans[i] = (x[i]/ans[i] + ans[i])/divisor;
         }
 }
