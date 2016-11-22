@@ -1,32 +1,29 @@
 const float epsilon = 0.0001f;
 const float divisor = 2f;
 
-export void sqrt_ispc(uniform int N, uniform float x[], uniform float ans[], uniform int num_cores, uniform int num_threads)
+export void sqrt_ispc(uniform int N, uniform float x[], uniform float ans[], uniform int num_threads)
 {
-	if (num_cores <= 1)
+	if (num_threads <= 1)
 	{
-		if (num_threads <= 1)
-		{
-			sqrt(N, x, ans);
-		}
-		else
-		{
-			sqrt_t(N, x ans, num_threads);
-		}
+		sqrt(N, x, ans);
 	}
 	else
 	{
-		if (num_threads <= 1)
-		{
-			launch[num_cores] task_sqrt(N, x, ans);
-		}
-		else
-		{
-			launch[num_cores] task_sqrt_t(N, x, ans, num_threads);
-		}
-		sync;
-		// now safe
+		sqrt_t(N, x ans, num_threads);
 	}
+}
+
+export void sqrt_ispc_task(uniform int N, uniform float x[], uniform float ans[], uniform int num_cores, uniform int num_threads)
+{
+	if (num_threads <= 1)
+	{
+		launch[num_cores] task_sqrt(N, x, ans);
+	}
+	else
+	{
+		launch[num_cores] task_sqrt_t(N, x, ans, num_threads);
+	}
+	sync;
 }
 
 void sqrt(uniform int N, uniform float x[], uniform float ans[])
