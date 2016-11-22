@@ -24,6 +24,8 @@ export void sqrt_ispc(uniform int N, uniform float x[], uniform float ans[], uni
 		{
 			launch[num_cores] task_sqrt_t(N, x, ans, num_threads);
 		}
+		sync;
+		// now safe
 	}
 }
 
