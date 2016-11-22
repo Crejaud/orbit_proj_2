@@ -13,7 +13,7 @@ export void sqrt_ispc(uniform int N, uniform float x[], uniform float ans[], uni
 	}
 }
 
-export void sqrt_ispc_task(uniform int N, uniform float x[], uniform float ans[], uniform int num_cores, uniform int num_threads)
+export void sqrt_ispc_tasks(uniform int N, uniform float x[], uniform float ans[], uniform int num_cores, uniform int num_threads)
 {
 	if (num_threads <= 1)
 	{
@@ -38,33 +38,27 @@ void sqrt_t(uniform int N, uniform float x[], uniform float ans[], uniform int n
 {
 	foreach (i = 0 ... N)
         {
-                int start_t, end_t, range_t;
-        	range_t = N / num_threads;
-        	start_t = range_t * i;
-        	end_t = start_t + range_t;
-		
-		if (i = num_threads - 1)
-			end_t = num_threads;
+                int first_t, last_t, span_t;
+        	span_t = N / num_threads;
+        	first_t = i * span_t;
+        	last_t = min((i+1) * span_t, N);
 
-		int j;
-		for (j = start_t; j < end_t; j++)
+		int i_t;
+		for (i_t = first_t; i_t < last_t; i_t++)
 		{
-			newton_sqrt(j, x, ans);
+			newton_sqrt(i_t, x, ans);
 		}
 	}
 }
 
 task void task_sqrt(uniform int N, uniform float x[], uniform float ans[])
 {
-	uniform int start, end, range;
-	range = N / (taskCount + 1);
-	start = range * taskIndex;
-	end = start + range;
+	uniform int first, last, span;
+	span = N/taskCount;
+	first = taskIndex * span;
+	last = min((taskIndex+1) * span, N);
 
-	if (taskIndex == taskCount - 1)
-		end = N;
-
-	foreach (i = start ... end)
+	foreach (i = first ... last)
 	{
 		newton_sqrt(i, x, ans);
 	}
@@ -72,24 +66,25 @@ task void task_sqrt(uniform int N, uniform float x[], uniform float ans[])
 
 task void task_sqrt_t(uniform int N, uniform float x[], uniform float ans[], uniform int num_threads)
 {
-	uniform int start, end, range;
-        range = N / (taskCount + 1);
-        start = range * taskIndex;
-        end = start + range;
+	uniform int first, last, span;
+        span = N/taskCount;
+        first = taskIndex * span;
+        last = min((taskIndex+1) * span, N);
 
-        if (taskIndex == taskCount - 1)
-                end = N;
-
-        foreach (i = start ... end)
+        foreach (i = first ... last)
         {
-		int start_t, end_t, range_t;
-		range_t = range / num_threads;
-		start_t = range_t * i;
-		end_t = start_t + range_t;
-		int j;
-		for (j = start_t, j < end_t; j++)
+		// in this scope:
+		// we must split work into partitions
+		// so total count s the span
+		// i is the start of the span for threads
+		int first_t, last_t, span_t;
+		span_t = span / num_threads;
+		first_t = i * span_t;
+		last_t = min((i+1) * span_t, span);
+		int i_t;
+		for (i_t = first_t, i_t < last_t; i_t++)
 		{
-                	newton_sqrt(j, x, ans);
+                	newton_sqrt(i_t, x, ans);
 		}
         }
 }
