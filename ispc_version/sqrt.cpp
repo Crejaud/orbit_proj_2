@@ -9,11 +9,11 @@ using namespace ispc;
 void sqrt_seq(float x[], float ans[]);
 
 const float epsilon = 0.0001f;
-const float divisor = 2f;
+const float divisor = 2.f;
 const float MAX = 5;
 const float MIN = 0;
 /* Change this to whatever you'd like! */
-const int NUM_ROOTS = 1024;
+const int NUM_ROOTS = 16777216;
 
 int main()
 {
@@ -22,13 +22,13 @@ int main()
 	float x[NUM_ROOTS];
 	float ans[NUM_ROOTS];
 	int i;
-	
+
 	// initialize x with random floats within [MIN, MAX]
 	for (i = 0; i < NUM_ROOTS; i++)
 	{
 		x[i] = (float) rand()/(float)(RAND_MAX/MAX) + MIN;
 	}
-	
+
 	// CALLING SQRT IN ISPC
 	int num_cores;
 	int num_threads;
@@ -39,10 +39,10 @@ int main()
 		sqrt_ispc(NUM_ROOTS, x, ans, num_threads);
 		end = clock();
 		timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
-		
-		printf("[sqrt ispc] [%d elements] [1 core | %d thread(s)]: [%f] cycles", 
-			NUM_ROOTS, 
-			num_threads, 
+
+		printf("[sqrt ispc] [%d elements] [1 core | %d thread(s)]: [%f] cycles\n",
+			NUM_ROOTS,
+			num_threads,
 			timeSpent);
 	}
 
@@ -55,11 +55,11 @@ int main()
 			sqrt_ispc_tasks(NUM_ROOTS, x, ans, num_cores, num_threads);
 			end = clock();
 			timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
-			
-			printf("[sqrt ispc] [%d elements] [%d cores | %d thread(s)]: [%f] cycles", 
-				NUM_ROOTS, 
-				num_cores, 
-				num_threads, 
+
+			printf("[sqrt ispc] [%d elements] [%d cores | %d thread(s)]: [%f] cycles\n",
+				NUM_ROOTS,
+				num_cores,
+				num_threads,
 				timeSpent);
 		}
 	}
@@ -77,8 +77,8 @@ int main()
 	sqrt_seq(x, ans);
 	end = clock();
         timeSpentSeq = (double)(end - begin) / CLOCKS_PER_SEC;
-	
-	printf("[sqrt seq] [%d elements]: [%f] cycles", NUM_ROOTS, timeSpentSeq);
+
+	printf("[sqrt seq] [%d elements]: [%f] cycles\n", NUM_ROOTS, timeSpentSeq);
 
 	// free all allocated memory
 	free(x);
