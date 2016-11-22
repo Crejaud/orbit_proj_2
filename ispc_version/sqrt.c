@@ -18,51 +18,51 @@ const int NUM_ROOTS = 1024;
 int main()
 {
 	clock_t begin, end;
-	double timeSpentIspc, timeSpentSeq;
-	float x[NUM_ROOTS], x_seq[NUM_ROOTS];
-	float ans[NUM_ROOTS], ans_seq[NUM_ROOTS];
-
+	double timeSpent, timeSpentIspc, timeSpentSeq;
+	float x[NUM_ROOTS];
+	float ans[NUM_ROOTS];
 	int i;
 	
 	// initialize x with random floats within [MIN, MAX]
 	for (i = 0; i < NUM_ROOTS; i++)
 	{
-		float rand_num = (float) rand()/(float)(RAND_MAX/MAX) + MIN;
-		x[i] = rand_num;
-		x_seq[i] = rand_num;
+		x[i] = (float) rand()/(float)(RAND_MAX/MAX) + MIN;
 	}
 	
-	// call sqrt in parallel for all NUM_ROOTS numbers
-	begin = clock();
-	sqrt_ispc(NUM_ROOTS, x, ans, 1, 1);
-	end = clock();
-        timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
-	
-	printf("[sqrt ispc] & [%d elements] & [1 core | 1 thread]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
+	// CALLING SQRT IN ISPC
+	int num_cores;
+	int num_threads;
+	// NO TASKS: 1-8 threads
+	for (num_threads = 1; num_threads <= 8; num_threads++)
+	{
+		begin = clock();
+		sqrt_ispc(NUM_ROOTS, x, ans, num_threads);
+		end = clock();
+		timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
+		
+		printf("[sqrt ispc] [%d elements] [1 core | %d thread(s)]: [%f] cycles", 
+			NUM_ROOTS, 
+			num_threads, 
+			timeSpent);
+	}
 
-	// call sqrt in parallel for all NUM_ROOTS numbers
-        begin = clock();
-        sqrt_ispc(NUM_ROOTS, x, ans, 1, 200);
-        end = clock();
-        timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
-
-        printf("[sqrt ispc] & [%d elements] & [1 core | 200 threads]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
-
-	// call sqrt in parallel for all NUM_ROOTS numbers
-        begin = clock();
-        sqrt_ispc(NUM_ROOTS, x, ans, 2, 1);
-        end = clock();
-        timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
-
-        printf("[sqrt ispc] & [%d elements] & [2 cores | 1 thread]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
-
-	// call sqrt in parallel for all NUM_ROOTS numbers
-        begin = clock();
-        sqrt_ispc(NUM_ROOTS, x, ans, 2, 200);
-        end = clock();
-        timeSpentIspc = (double)(end - begin) / CLOCKS_PER_SEC;
-
-        printf("[sqrt ispc] & [%d elements] & [2 cores | 200 threads]: [%f] cycles", NUM_ROOTS, timeSpentIspc);
+	// TASKS: 2-4 cores & 1-8 threads
+	for (num_cores = 2; num_cores <= 4; num_cores++)
+	{
+		for (num_threads = 1; num_threads <= 8; num_threads++)
+		{
+			begin = clock();
+			sqrt_ispc_tasks(NUM_ROOTS, x, ans, num_cores, num_threads);
+			end = clock();
+			timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
+			
+			printf("[sqrt ispc] [%d elements] [%d cores | %d thread(s)]: [%f] cycles", 
+				NUM_ROOTS, 
+				num_cores, 
+				num_threads, 
+				timeSpent);
+		}
+	}
 
 	// print out if you want to verify
 	/*
@@ -74,19 +74,15 @@ int main()
 
 	// now do it sequentially
 	begin = clock();
-	sqrt_seq(x_seq, ans_seq);
+	sqrt_seq(x, ans);
 	end = clock();
         timeSpentSeq = (double)(end - begin) / CLOCKS_PER_SEC;
 	
-	printf("[sqrt seq] & [%d elements]: [%f] cycles", NUM_ROOTS, timeSpentSeq);
-
-	printf("(%f speedup from ISPC)", timeSpentSeq/timeSpentIspc);
+	printf("[sqrt seq] [%d elements]: [%f] cycles", NUM_ROOTS, timeSpentSeq);
 
 	// free all allocated memory
 	free(x);
-	free(x_seq);
 	free(ans);
-	free(ans_seq);
 
 	return 0;
 }
