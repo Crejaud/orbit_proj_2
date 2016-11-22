@@ -1,29 +1,13 @@
 const float epsilon = 0.0001f;
 const float divisor = 2f;
 
-export void sqrt_ispc(uniform int N, uniform float x[], uniform float ans[], uniform int num_threads)
+static void newton_sqrt(int i, uniform float x[], uniform float ans[])
 {
-	if (num_threads <= 1)
+	ans[i] = x[i];
+	while (epsilon * ans[i] < abs(ans[i] - x[i]/ans[i]))
 	{
-		sqrt_no_task(N, x, ans);
-	}
-	else
-	{
-		sqrt_t_no_task(N, x, ans, num_threads);
-	}
-}
-
-export void sqrt_ispc_tasks(uniform int N, uniform float x[], uniform float ans[], uniform int num_cores2, uniform int num_threads)
-{
-	if (num_threads <= 1)
-	{
-		launch[num_cores2] sqrt_task(N, x, ans);
-	}
-	else
-	{
-		launch[num_cores2] sqrt_t_task(N, x, ans, num_threads);
-	}
-	sync;
+        	ans[i] = (x[i]/ans[i] + ans[i])/divisor;
+        }
 }
 
 static void sqrt_no_task(uniform int N, uniform float x[], uniform float ans[])
@@ -89,11 +73,28 @@ static task void sqrt_t_task(uniform int N, uniform float x[], uniform float ans
         }
 }
 
-static void newton_sqrt(int i, uniform float x[], uniform float ans[])
+
+export void sqrt_ispc(uniform int N, uniform float x[], uniform float ans[], uniform int num_threads)
 {
-	ans[i] = x[i];
-	while (epsilon * ans[i] < abs(ans[i] - x[i]/ans[i]))
+	if (num_threads <= 1)
 	{
-        	ans[i] = (x[i]/ans[i] + ans[i])/divisor;
-        }
+		sqrt_no_task(N, x, ans);
+	}
+	else
+	{
+		sqrt_t_no_task(N, x, ans, num_threads);
+	}
+}
+
+export void sqrt_ispc_tasks(uniform int N, uniform float x[], uniform float ans[], uniform int num_cores2, uniform int num_threads)
+{
+	if (num_threads <= 1)
+	{
+		launch[num_cores2] sqrt_task(N, x, ans);
+	}
+	else
+	{
+		launch[num_cores2] sqrt_t_task(N, x, ans, num_threads);
+	}
+	sync;
 }
