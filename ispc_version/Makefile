@@ -15,10 +15,10 @@ dirs:
 clean:
 	/bin/rm -rf objs *~ sqrt
 
-simple: dirs  objs/sqrt.o objs/sqrt_ispc.o
+sqrt: dirs  objs/sqrt.o objs/sqrt_ispc.o
 	$(CXX) $(CXXFLAGS) -o $@ objs/sqrt.o objs/sqrt_ispc.o
 
-objs/simple.o: sqrt.c objs/sqr_ispc.h 
+objs/sqrt.o: sqrt.c objs/sqrt_ispc.h 
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 objs/%_ispc.h objs/%_ispc.o: %.ispc
