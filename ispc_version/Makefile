@@ -2,7 +2,7 @@
 CXX=clang++ -m64
 CXXFLAGS=-Iobjs/ -O3 -Wall
 ISPC=ispc
-ISPCFLAGS=-O2 --arch=x86-64 --target=sse2-i32x4
+ISPCFLAGS=-O2 --arch=x86-64 --target=avx2-i32x8
 
 default: sqrt
 
@@ -17,7 +17,7 @@ clean:
 
 sqrt:
 	/bin/mkdir -p objs/
-	ispc -O2 --arch=x86-64 --target=sse2 sqrt.ispc -o objs/sqrt_ispc.o -h objs/sqrt_ispc.h
-	clang++ -m64 -Iobjs/ -O3 -Wall -c -o objs/sqrt.o sqrt.cpp
-	clang++ -m64 -lobjs/ -O3 -Wall -c -o objs/task.o tasksys.cpp
-	clang++ -m64 -Iobjs/ -O3 -Wall -o sqrt objs/sqrt.o objs/sqrt_ispc.o objs/task.o -lpthread
+	ispc $(ISPCFLAGS) sqrt.ispc -o objs/sqrt_ispc.o -h objs/sqrt_ispc.h
+	clang++ -m64 -mavx -Iobjs/ -O3 -Wall -c -o objs/sqrt.o sqrt.cpp
+	clang++ -m64 -mavx -lobjs/ -O3 -Wall -c -o objs/task.o tasksys.cpp
+	clang++ -m64 -mavx -Iobjs/ -O3 -Wall -o sqrt objs/sqrt.o objs/sqrt_ispc.o objs/task.o -lpthread

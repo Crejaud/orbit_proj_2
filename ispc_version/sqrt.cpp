@@ -2,11 +2,14 @@
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
+#include <immintrin.h>
 #include "sqrt_ispc.h"
 
 using namespace ispc;
 
 void sqrt_seq(float x[], float ans[]);
+void sqrt_avx_loop(float x[], float ans[]);
+void sqrt_avx(__m256 x_avx);
 
 const float epsilon = 0.0001f;
 const float divisor = 2.f;
@@ -72,6 +75,14 @@ int main()
 	}
 	*/
 
+	// now do it avx
+	begin = clock();
+	sqrt_avx_loop(x, ans);
+	end = clock();
+        timeSpentSeq = (double)(end - begin) / CLOCKS_PER_SEC;
+  	printf("avx\n");
+	printf("%f cycles\n", timeSpentSeq);
+
 	// now do it sequentially
 	begin = clock();
 	sqrt_seq(x, ans);
@@ -94,4 +105,49 @@ void sqrt_seq(float x[], float ans[])
                         ans[i] = (x[i]/ans[i] + ans[i])/divisor;
                 }
         }
+}
+
+void sqrt_avx_loop(float x[], float ans[])
+{
+	int i;
+	for (i = 0; i < NUM_ROOTS/8; i++)
+	{
+		__m256 x_avx = _mm256_set_ps(x[8*i], x[8*i+1], x[8*i+2], x[8*i+3], x[8*i+4], x[8*i+5],x[8*i+6], x[8*i+7]);
+		sqrt_avx(x_avx);
+	}
+}
+
+void sqrt_avx(__m256 x_avx)
+{
+	__m256 twos = _mm256_set_ps(2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
+	__m256 ans_avx = _mm256_div_ps(x_avx, twos);
+	__m256 diff = _mm256_sub_ps(x_avx, ans_avx);
+
+	bool diffmag = false;
+
+	int i;
+	for (i = 0; i < 8; i++)
+	{
+		if (fabsf(diff[i]) > epsilon)
+		{
+			diffmag = true;
+			break;
+		}
+	}
+
+	while (diffmag)
+	{
+		__m256 temp_ans_avx = ans_avx;
+		ans_avx = _mm256_div_ps (_mm256_add_ps (ans_avx, _mm256_div_ps (x_avx, ans_avx)), twos);
+		diff = _mm256_sub_ps (temp_ans_avx, ans_avx);
+		diffmag = false;
+		for (i = 0; i < 8; i++)
+		{
+			if (fabsf(diff[i]) > epsilon)
+			{
+				diffmag = true;
+				break;
+			}
+		}
+	}
 }
