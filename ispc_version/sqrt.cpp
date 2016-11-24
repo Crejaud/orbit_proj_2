@@ -16,7 +16,7 @@ const float divisor = 2.f;
 const float MAX = 5;
 const float MIN = 0;
 /* Change this to whatever you'd like! */
-const int NUM_ROOTS = 65536;
+const unsigned long long int NUM_ROOTS =524288;
 
 int main()
 {
@@ -47,18 +47,19 @@ int main()
 		printf("1 | %d thread(s) | %f cycles\n",
 			num_threads,
 			timeSpent);
+printf("test0\n");
 	}
-
+printf("test1\n");
 	// TASKS: 2-4 cores & 1-8 threads
 	for (num_cores = 2; num_cores <= 4; num_cores++)
 	{
 		for (num_threads = 1; num_threads <= 8; num_threads++)
 		{
 			begin = clock();
-			sqrt_ispc_tasks(NUM_ROOTS, x, ans, num_cores, num_threads);
-			end = clock();
+			sqrt_ispc_tasks(NUM_ROOTS, x, ans, num_cores, num_threads);printf("test2\n");
+			end = clock();printf("test3\n");
 			timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
-
+printf("test4\n");
 			printf("%d | %d thread(s) | %f cycles\n",
 				num_cores,
 				num_threads,
