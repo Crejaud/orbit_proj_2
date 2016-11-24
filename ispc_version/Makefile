@@ -18,6 +18,6 @@ clean:
 sqrt:
 	/bin/mkdir -p objs/
 	ispc $(ISPCFLAGS) sqrt.ispc -o objs/sqrt_ispc.o -h objs/sqrt_ispc.h
-	clang++ -m64 -mavx -Iobjs/ -O3 -Wall -c -o objs/sqrt.o sqrt.cpp
-	clang++ -m64 -mavx -lobjs/ -O3 -Wall -c -o objs/task.o tasksys.cpp
-	clang++ -m64 -mavx -Iobjs/ -O3 -Wall -o sqrt objs/sqrt.o objs/sqrt_ispc.o objs/task.o -lpthread
+	clang++-3.5 -m64 -mavx -Iobjs/ -O3 -Wall -c -o objs/sqrt.o sqrt.cpp
+	clang++-3.5 -m64 -mavx -lobjs/ -O3 -Wall -c -o objs/task.o tasksys.cpp
+	clang++-3.5 -m64 -mavx -Iobjs/ -O3 -Wall -o sqrt objs/sqrt.o objs/sqrt_ispc.o objs/task.o -lpthread
