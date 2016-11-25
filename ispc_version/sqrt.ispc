@@ -76,14 +76,24 @@ static task void sqrt_t_task(uniform unsigned int64 N, uniform float x[], unifor
 
 export void sqrt_ispc(uniform unsigned int64 N, uniform float x[], uniform float ans[], uniform int num_threads)
 {
-	if (num_threads <= 1)
+	foreach (i = 0 ... N)
+	{
+		ans[i] = x[i];
+		while ((epsilon < (ans[i] - x[i]/ans[i]))||((-1*epsilon)>(ans[i]-(x[i]/ans[i]))))
+		{
+	        	ans[i] = (x[i]/ans[i] + ans[i])/divisor;
+	        }
+	}
+}
+
+	/*if (num_threads <= 1)
 	{
 		sqrt_no_task(N, x, ans);
 	}
 	else
 	{
 		sqrt_t_no_task(N, x, ans, num_threads);
-	}
+	}*/
 }
 
 export void sqrt_ispc_tasks(uniform unsigned int64 N, uniform float x[], uniform float ans[], uniform int num_cores2, uniform int num_threads)
