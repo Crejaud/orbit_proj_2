@@ -10,7 +10,7 @@ static void newton_sqrt(unsigned int64 i, uniform float x[], uniform float ans[]
         }
 }
 
-static void sqrt_no_task(uniform int N, uniform float x[], uniform float ans[])
+static void sqrt_no_task(uniform unsigned int64 N, uniform float x[], uniform float ans[])
 {
 	foreach (i = 0 ... N)
 	{
@@ -22,12 +22,12 @@ static void sqrt_t_no_task(uniform unsigned int64 N, uniform float x[], uniform 
 {
 	foreach (i = 0 ... N)
         {
-                int unsigned long first_t, last_t, span_t;
+                unsigned int64 first_t, last_t, span_t;
         	span_t = N / num_threads;
         	first_t = i * span_t;
         	last_t = min((i+1) * span_t, N);
 
-		int unsigned long i_t;
+		unsigned int64 long i_t;
 		for (i_t = first_t; i_t < last_t; i_t++)
 		{
 			newton_sqrt(i_t, x, ans);
