@@ -19,15 +19,20 @@ const float MIN = 0;
 
 int main()
 {
+	printf("1\n");
 	clock_t begin, end;
+	printf("2\n");
 	double timeSpent, timeSpentIspc, timeSpentSeq;
+	printf("x\n");
 	float x[4194304];
+	printf("Ans\n");
 	float ans[4194304];
-	int i;
-	printf("starting\n");
+	unsigned long long i;
+	printf("try here\n");
 	// initialize x with random floats within [MIN, MAX]
 	for (i = 0; i < 4194304; i++)
 	{
+		printf("index %d\n", i);
 		x[i] = (float) rand()/(float)(RAND_MAX/MAX) + MIN;
 	}
 
@@ -96,7 +101,7 @@ printf("test4\n");
 
 void sqrt_seq(float x[], float ans[])
 {
-	int i;
+	unsigned long long i;
 	for (i = 0; i < 4194304; i++)
         {
                 ans[i] = x[i];
@@ -109,7 +114,7 @@ void sqrt_seq(float x[], float ans[])
 
 void sqrt_avx_loop(float x[], float ans[])
 {
-	int i;
+	unsigned long long i;
 	for (i = 0; i < 4194304/8; i++)
 	{
 		__m256 x_avx = _mm256_set_ps(x[8*i], x[8*i+1], x[8*i+2], x[8*i+3], x[8*i+4], x[8*i+5],x[8*i+6], x[8*i+7]);
@@ -125,7 +130,7 @@ void sqrt_avx(__m256 x_avx)
 
 	bool diffmag = false;
 
-	int i;
+	unsigned long long i;
 	for (i = 0; i < 8; i++)
 	{
 		if (fabsf(diff[i]) > epsilon)
