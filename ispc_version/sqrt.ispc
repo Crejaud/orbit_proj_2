@@ -79,12 +79,12 @@ export void sqrt_ispc(uniform unsigned int64 N, uniform float x[], uniform float
 	foreach (i = 0 ... N)
 	{
 		ans[i] = x[i];
-		while ((epsilon < (ans[i] - x[i]/ans[i]))||((-1*epsilon)>(ans[i]-(x[i]/ans[i]))))
+		while (((epsilon < (ans[i] - x[i]/ans[i]))||((-1*epsilon)>(ans[i]-(x[i]/ans[i]))))&&(x[i]!=0))
 		{
 	        	ans[i] = (x[i]/ans[i] + ans[i])/divisor;
 	        }
 	}
-}
+
 
 	/*if (num_threads <= 1)
 	{

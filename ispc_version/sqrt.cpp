@@ -29,9 +29,10 @@ int main()
 	for (i = 0; i < NUM_ROOTS; i++)
 	{
 		x[i] = (float) (rand()%6);
+		printf("%f at %d\n", x[i], i);
 	}
 	printf("initial %f\n", x[0]);
-	// CALLING SQRT IN ISPC
+	//x[7]=5;// CALLING SQRT IN ISPC
 	int num_cores;
 	int num_threads;
 	// NO TASKS: 1-8 threads
@@ -41,9 +42,10 @@ int main()
 		begin = clock();
 	printf("first try first %f and %f\n", x[0],x[1]);
 	sqrt_ispc(NUM_ROOTS, x, ans, num_threads);
-		printf("first try second %f\n", x[0]);end = clock();
+		printf("int %f %f %f %f %f %f %f %f\n", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
+		end = clock();
 		timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
-
+		printf("out %f %f %f %f %f %f %f %f\n", ans[0],ans[1], ans[2], ans[3], ans[4],ans[5], ans[6], ans[7]);
 		printf("1 | %d thread(s) | %f cycles\n",
 			num_threads,
 			timeSpent);
