@@ -1,3 +1,19 @@
+//New Readme - See old readme below
+
+The code is fully functional and runs on Orbit. To compile, you only need sqrt.cpp, sqrt.ispc, tasksys.cpp, and the Makefile.
+
+When in the directory that contains these, run "make"
+
+Make requires the following compilers to be installed: ISPC, clang++-3.5
+
+Once make is run, execute with ./sqrt
+
+
+
+
+
+//OLD README
+
 We ran into complications with getting sudo access on orbit, so we were not allowed to install much. 
 We tried out best to transfer over binaries to install ispc and clang, but the compilation just doesn't work on orbit.
 

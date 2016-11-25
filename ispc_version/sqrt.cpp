@@ -1,3 +1,4 @@
+//GROUP 19 Project 2
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -7,6 +8,7 @@
 
 using namespace ispc;
 
+//initialize functions & globals
 void sqrt_seq(float x[], float ans[]);
 void sqrt_avx_loop(float x[], float ans[]);
 void sqrt_avx(__m256 x_avx);
@@ -16,8 +18,12 @@ const float divisor = 2.f;
 const float MAX = 5;
 const float MIN = 0;
 
-/* Change this to whatever you'd like! */
+/* Change this to whatever power of 2 you'd like! Max value 524288. 
+Why is this the max value? We begin to overflow our stack and cause errors if we go larger than this. 
+Once we discovered this it was too late to refactor without completely redoing all the code.
+Why powers of 2? To keep the AVX intrinsics as efficent as possible since they use vectors of 8 floats*/
 const long long NUM_ROOTS=524288;
+
 int main()
 {
 	clock_t begin, end;
@@ -31,6 +37,7 @@ int main()
 	{
 		x[i] = (float) (rand()%6);
 	}
+
 	// CALLING SQRT IN ISPC
 	int num_cores;
 	int num_threads;
@@ -61,21 +68,14 @@ int main()
 		}
 	}
 
-	// print out if you want to verify
-
-	/*
-	for (i = 0 ; i <NUM_ROOTS; i++)
-	{
-		printf("%f: %f\n", x[i], ans[i]);
-	}
-	*/
-
 	// now do it avx
 	begin = clock();
 	sqrt_avx_loop(x, ans);
 	end = clock();
         timeSpentSeq = (double)(end - begin) / CLOCKS_PER_SEC;
-// 	printf("avx ran Netwon Ralphson %d times\n", testtest);
+	
+	//Uncomment the below line and line 139 to see how many times AVX ran newton ralphson
+	// printf("avx ran Netwon Ralphson %d times\n", testtest);
 	printf("avx\n");
 	printf("%f cycles\n", timeSpentSeq);
 
@@ -90,6 +90,7 @@ int main()
 	return 0;
 }
 
+//Sequential
 void sqrt_seq(float x[], float ans[])
 {
 	unsigned long long i;
@@ -103,11 +104,13 @@ void sqrt_seq(float x[], float ans[])
         }
 }
 
+//AVX Functions
 void sqrt_avx_loop(float x[], float ans[])
 {
 	unsigned long long i;
 	for (i = 0; i < NUM_ROOTS/8; i++)
 	{
+		//put the contents of X into vectors, which each hold 8 floats
 		__m256 x_avx = _mm256_set_ps(x[8*i], x[8*i+1], x[8*i+2], x[8*i+3], x[8*i+4], x[8*i+5],x[8*i+6], x[8*i+7]);
 		sqrt_avx(x_avx);
 	}
@@ -115,7 +118,7 @@ void sqrt_avx_loop(float x[], float ans[])
 
 void sqrt_avx(__m256 x_avx)
 {
-
+	//actually do the square root with vectors
 	__m256 twos = _mm256_set_ps(2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
 	__m256 ans_avx = _mm256_div_ps(x_avx, twos);
 	__m256 diff = _mm256_sub_ps(x_avx, ans_avx);
