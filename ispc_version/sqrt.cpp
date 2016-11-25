@@ -116,7 +116,7 @@ void sqrt_avx_loop(float x[], float ans[])
 	for (i = 0; i < NUM_ROOTS/8; i++)
 	{
 		__m256 x_avx = _mm256_set_ps(x[8*i], x[8*i+1], x[8*i+2], x[8*i+3], x[8*i+4], x[8*i+5],x[8*i+6], x[8*i+7]);
-		//printf("initialize %d %d  %d\n",i,  x[8*i], x_avx[0]);
+		printf("initialize %d %d  %d\n",i,  x[8*i], x_avx[0]);
 		sqrt_avx(x_avx);
 	}
 }
