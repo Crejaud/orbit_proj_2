@@ -1,7 +1,7 @@
 const float epsilon = 0.0001f;
 const float divisor = 2f;
 
-static void newton_sqrt(int unsigned long long i, uniform float x[], uniform float ans[])
+static void newton_sqrt(int unsigned long i, uniform float x[], uniform float ans[])
 {
 	ans[i] = x[i];
 	while (epsilon * ans[i] < abs(ans[i] - x[i]/ans[i]))
@@ -18,16 +18,16 @@ static void sqrt_no_task(uniform int N, uniform float x[], uniform float ans[])
 	}
 }
 
-static void sqrt_t_no_task(uniform unsigned long long int N, uniform float x[], uniform float ans[], uniform int num_threads)
+static void sqrt_t_no_task(uniform unsigned long int N, uniform float x[], uniform float ans[], uniform int num_threads)
 {
 	foreach (i = 0 ... N)
         {
-                int unsigned long long first_t, last_t, span_t;
+                int unsigned long first_t, last_t, span_t;
         	span_t = N / num_threads;
         	first_t = i * span_t;
         	last_t = min((i+1) * span_t, N);
 
-		int unsigned long long i_t;
+		int unsigned long i_t;
 		for (i_t = first_t; i_t < last_t; i_t++)
 		{
 			newton_sqrt(i_t, x, ans);
@@ -35,9 +35,9 @@ static void sqrt_t_no_task(uniform unsigned long long int N, uniform float x[], 
 	}
 }
 
-static task void sqrt_task(uniform unsigned long long int N, uniform float x[], uniform float ans[])
+static task void sqrt_task(uniform unsigned long int N, uniform float x[], uniform float ans[])
 {
-	uniform unsigned long long int first, last, span;
+	uniform unsigned long int first, last, span;
 	span = N/taskCount;
 	first = taskIndex * span;
 	last = min((taskIndex+1) * span, N);
@@ -48,9 +48,9 @@ static task void sqrt_task(uniform unsigned long long int N, uniform float x[], 
 	}
 }
 
-static task void sqrt_t_task(uniform unsigned long long int N, uniform float x[], uniform float ans[], uniform int num_threads)
+static task void sqrt_t_task(uniform unsigned long int N, uniform float x[], uniform float ans[], uniform int num_threads)
 {
-	uniform unsigned long long int first, last, span;
+	uniform unsigned long int first, last, span;
         span = N/taskCount;
         first = taskIndex * span;
         last = min((taskIndex+1) * span, N);
@@ -61,11 +61,11 @@ static task void sqrt_t_task(uniform unsigned long long int N, uniform float x[]
 		// we must split work into partitions
 		// so total count s the span
 		// i is the start of the span for threads
-		unsigned long long int first_t, last_t, span_t;
+		unsigned long int first_t, last_t, span_t;
 		span_t = span / num_threads;
 		first_t = i * span_t;
 		last_t = min((i+1) * span_t, span);
-		unsigned long long int i_t;
+		unsigned long int i_t;
 		for (i_t = first_t; i_t < last_t; i_t++)
 		{
                 	newton_sqrt(i_t, x, ans);
@@ -74,7 +74,7 @@ static task void sqrt_t_task(uniform unsigned long long int N, uniform float x[]
 }
 
 
-export void sqrt_ispc(uniform unsigned long long int N, uniform float x[], uniform float ans[], uniform int num_threads)
+export void sqrt_ispc(uniform unsigned long int N, uniform float x[], uniform float ans[], uniform int num_threads)
 {
 	if (num_threads <= 1)
 	{
@@ -86,7 +86,7 @@ export void sqrt_ispc(uniform unsigned long long int N, uniform float x[], unifo
 	}
 }
 
-export void sqrt_ispc_tasks(uniform unsigned long long int N, uniform float x[], uniform float ans[], uniform int num_cores2, uniform int num_threads)
+export void sqrt_ispc_tasks(uniform unsigned long int N, uniform float x[], uniform float ans[], uniform int num_cores2, uniform int num_threads)
 {
 	if (num_threads <= 1)
 	{
