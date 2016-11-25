@@ -1,10 +1,10 @@
-const float epsilon = 0.0001f;
-const float divisor = 2f;
+const uniform float epsilon = 0.0001f;
+const uniform float divisor = 2f;
 
 static void newton_sqrt(unsigned int64 i, uniform float x[], uniform float ans[])
 {
 	ans[i] = x[i];
-	while (epsilon * ans[i] < abs(ans[i] - x[i]/ans[i]))
+	while ((epsilon < (ans[i] - x[i]/ans[i]))||((-1*epsilon)>(ans[i]-(x[i]/ans[i]))))
 	{
         	ans[i] = (x[i]/ans[i] + ans[i])/divisor;
         }
