@@ -1,0 +1,78 @@
+Results with a counter to make sure that avx is actually doing newton ralphson
+ispc
+1 | 1 thread(s) | 0.021047 cycles
+1 | 2 thread(s) | 0.062991 cycles
+1 | 3 thread(s) | 0.046813 cycles
+1 | 4 thread(s) | 0.037687 cycles
+1 | 5 thread(s) | 0.030973 cycles
+1 | 6 thread(s) | 0.026872 cycles
+1 | 7 thread(s) | 0.024362 cycles
+1 | 8 thread(s) | 0.029482 cycles
+2 | 1 thread(s) | 0.020870 cycles
+2 | 2 thread(s) | 0.033137 cycles
+2 | 3 thread(s) | 0.024788 cycles
+2 | 4 thread(s) | 0.020076 cycles
+2 | 5 thread(s) | 0.016664 cycles
+2 | 6 thread(s) | 0.014635 cycles
+2 | 7 thread(s) | 0.013349 cycles
+2 | 8 thread(s) | 0.015626 cycles
+3 | 1 thread(s) | 0.020719 cycles
+3 | 2 thread(s) | 0.022536 cycles
+3 | 3 thread(s) | 0.016994 cycles
+3 | 4 thread(s) | 0.013743 cycles
+3 | 5 thread(s) | 0.011653 cycles
+3 | 6 thread(s) | 0.010352 cycles
+3 | 7 thread(s) | 0.009430 cycles
+3 | 8 thread(s) | 0.008745 cycles
+4 | 1 thread(s) | 0.020913 cycles
+4 | 2 thread(s) | 0.017322 cycles
+4 | 3 thread(s) | 0.013153 cycles
+4 | 4 thread(s) | 0.010813 cycles
+4 | 5 thread(s) | 0.009118 cycles
+4 | 6 thread(s) | 0.008092 cycles
+4 | 7 thread(s) | 0.007451 cycles
+4 | 8 thread(s) | 0.008603 cycles
+avx ran Netwon Ralphson 309707 times
+0.006332 cycles
+sequential
+0.007925 cycles
+
+
+With the counter removed - turns out avx is ultra fast
+ispc
+1 | 1 thread(s) | 0.020916 cycles
+1 | 2 thread(s) | 0.063353 cycles
+1 | 3 thread(s) | 0.047058 cycles
+1 | 4 thread(s) | 0.037873 cycles
+1 | 5 thread(s) | 0.031086 cycles
+1 | 6 thread(s) | 0.026965 cycles
+1 | 7 thread(s) | 0.024483 cycles
+1 | 8 thread(s) | 0.028938 cycles
+2 | 1 thread(s) | 0.020749 cycles
+2 | 2 thread(s) | 0.033318 cycles
+2 | 3 thread(s) | 0.024992 cycles
+2 | 4 thread(s) | 0.020217 cycles
+2 | 5 thread(s) | 0.016677 cycles
+2 | 6 thread(s) | 0.014641 cycles
+2 | 7 thread(s) | 0.013321 cycles
+2 | 8 thread(s) | 0.015314 cycles
+3 | 1 thread(s) | 0.020651 cycles
+3 | 2 thread(s) | 0.022749 cycles
+3 | 3 thread(s) | 0.017101 cycles
+3 | 4 thread(s) | 0.013805 cycles
+3 | 5 thread(s) | 0.011687 cycles
+3 | 6 thread(s) | 0.010324 cycles
+3 | 7 thread(s) | 0.009493 cycles
+3 | 8 thread(s) | 0.008772 cycles
+4 | 1 thread(s) | 0.020811 cycles
+4 | 2 thread(s) | 0.017436 cycles
+4 | 3 thread(s) | 0.013231 cycles
+4 | 4 thread(s) | 0.010885 cycles
+4 | 5 thread(s) | 0.009202 cycles
+4 | 6 thread(s) | 0.007963 cycles
+4 | 7 thread(s) | 0.007594 cycles
+4 | 8 thread(s) | 0.008579 cycles
+avx
+0.000002 cycles
+sequential
+0.007978 cycles
