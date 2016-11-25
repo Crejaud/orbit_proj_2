@@ -27,7 +27,7 @@ static void sqrt_t_no_task(uniform unsigned int64 N, uniform float x[], uniform 
         	first_t = i * span_t;
         	last_t = min((i+1) * span_t, N);
 
-		unsigned int64 long i_t;
+		unsigned int64 i_t;
 		for (i_t = first_t; i_t < last_t; i_t++)
 		{
 			newton_sqrt(i_t, x, ans);

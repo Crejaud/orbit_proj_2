@@ -34,8 +34,8 @@ namespace ispc { /* namespace */
 #if defined(__cplusplus) && (! defined(__ISPC_NO_EXTERN_C) || !__ISPC_NO_EXTERN_C )
 extern "C" {
 #endif // __cplusplus
-    extern void sqrt_ispc(int32_t N, float * x, float * ans, int32_t num_threads);
-    extern void sqrt_ispc_tasks(int32_t N, float * x, float * ans, int32_t num_cores2, int32_t num_threads);
+    extern void sqrt_ispc(uint64_t N, float * x, float * ans, int32_t num_threads);
+    extern void sqrt_ispc_tasks(uint64_t N, float * x, float * ans, int32_t num_cores2, int32_t num_threads);
 #if defined(__cplusplus) && (! defined(__ISPC_NO_EXTERN_C) || !__ISPC_NO_EXTERN_C )
 } /* end extern C */
 #endif // __cplusplus

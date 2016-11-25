@@ -16,7 +16,7 @@ const float divisor = 2.f;
 const float MAX = 5;
 const float MIN = 0;
 /* Change this to whatever you'd like! */
-const unsigned long long int NUM_ROOTS =524288;
+unsigned long long NUM_ROOTS;
 
 int main()
 {
@@ -25,7 +25,8 @@ int main()
 	float x[NUM_ROOTS];
 	float ans[NUM_ROOTS];
 	int i;
-
+	printf("starting\n");
+	NUM_ROOTS=4194304;
 	// initialize x with random floats within [MIN, MAX]
 	for (i = 0; i < NUM_ROOTS; i++)
 	{
